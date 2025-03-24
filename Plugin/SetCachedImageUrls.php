@@ -28,6 +28,11 @@ class SetCachedImageUrls
     /**
      * Retrieve the product used to initialize the ImageHelper
      *
+     * The image helper uses the product to retrieve the correct label of an image.
+     * As the label is already correctly set at this point, this information is not necessary.
+     * Thus, an "empty" product is used, instead of retrieving each product from the repository.
+     * This drastically improves performance by avoiding database calls in a foreach-loop.
+     *
      * @return Product
      */
     private function getProduct(): Product
