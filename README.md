@@ -10,7 +10,7 @@
 
 ---
 
-When preparing the data for the catalog export to Live Search, the image urls see do not consider the resized, cached files.
+When preparing the data for the catalog export to live search, die catalog data export module does not consider the resized, cached files.
 Instead, the unchanged source file (selected in the admin area) is used. This has considerable performance implications, because the images are now a lot bigger than they need to be.
 Depending on the implementation, this can affect the entire catalog and product listing page, but will in any case affect the search popover.
 
