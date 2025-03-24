@@ -45,6 +45,7 @@ For now, it only supports resizing of the thumbnail image.
 
 ## Testing
 
+Please test this functionality locally or on your staging system, before using it in production.
 
 1. Reset the `catalog_data_exporter_products` index, as it might be occupied by another process.
 
