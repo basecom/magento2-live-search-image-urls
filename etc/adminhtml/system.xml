@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="storefront_features">
+            <group id="image_dimensions"
+                   translate="label"
+                   sortOrder="100"
+                   showInDefault="1"
+                   showInWebsite="1"
+                   showInStore="1">
+                <label>Image Dimensions</label>
+                <field id="size_mode"
+                       translate="label comment"
+                       type="select"
+                       sortOrder="10"
+                       showInDefault="1"
+                       showInWebsite="1"
+                       showInStore="1"
+                       canRestore="1">
+                    <label>Resize Mode</label>
+                    <comment>
+                        <![CDATA[
+                            Only works on Hyvä Storefronts!
+                            <br>
+                            Auto: Read from theme's view.xml file (recommended).
+                            <br>
+                            Manual: Define custom width and height values.
+                        ]]>
+                    </comment>
+                    <source_model>Basecom\LiveSearchImageUrls\Model\Config\Source\SizeMode</source_model>
+                </field>
+                <field id="image_id"
+                       translate="label"
+                       type="select"
+                       sortOrder="20"
+                       showInDefault="1"
+                       showInWebsite="1"
+                       showInStore="1"
+                       canRestore="1">
+                    <label>Image ID</label>
+                    <source_model>Basecom\LiveSearchImageUrls\Model\Config\Source\ViewXmlImageTypes</source_model>
+                    <depends>
+                        <field id="storefront_features/image_dimensions/size_mode">automatic</field>
+                    </depends>
+                </field>
+                <field id="resize_height"
+                       translate="label"
+                       type="text"
+                       sortOrder="30"
+                       showInDefault="1"
+                       showInWebsite="1"
+                       showInStore="1"
+                       canRestore="1">
+                    <label>Height (px)</label>
+                    <validate>required-entry integer</validate>
+                    <depends>
+                        <field id="storefront_features/image_dimensions/size_mode">manual</field>
+                    </depends>
+                </field>
+                <field id="resize_width"
+                       translate="label"
+                       type="text"
+                       sortOrder="40"
+                       showInDefault="1"
+                       showInWebsite="1"
+                       showInStore="1"
+                       canRestore="1">
+                    <label>Width (px)</label>
+                    <validate>required-entry integer</validate>
+                    <depends>
+                        <field id="storefront_features/image_dimensions/size_mode">manual</field>
+                    </depends>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>
