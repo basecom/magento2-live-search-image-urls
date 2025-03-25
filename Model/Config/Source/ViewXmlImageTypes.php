@@ -11,7 +11,8 @@ class ViewXmlImageTypes implements OptionSourceInterface
 {
     public function __construct(
         private readonly ArrayManager $arrayManager,
-        private readonly ConfigInterface $viewConfig
+        private readonly ConfigInterface $viewConfig,
+        private readonly string $imageType = 'thumbnail'
     ) {
     }
 
@@ -22,6 +23,10 @@ class ViewXmlImageTypes implements OptionSourceInterface
         $imageConfig = $this->arrayManager->get('media/Magento_Catalog/images', $viewConfig) ?? [];
 
         foreach ($imageConfig as $type => $config) {
+            if (!isset($config['type']) || $config['type'] !== $this->imageType){
+                continue;
+            }
+
             $suffix = '';
 
             if (array_key_exists('width', $config)) {
