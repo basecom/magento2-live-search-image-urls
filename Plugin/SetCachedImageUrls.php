@@ -3,10 +3,14 @@ declare(strict_types=1);
 
 namespace Basecom\LiveSearchImageUrls\Plugin;
 
+use Basecom\LiveSearchImageUrls\Model\Config\Source\SizeMode;
+use Basecom\LiveSearchImageUrls\System\ModuleConfig;
 use Magento\Catalog\Helper\Image as ImageHelper;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ProductFactory;
 use Magento\CatalogDataExporter\Model\Provider\Product\Formatter\ImageFormatter;
+use Magento\Framework\Stdlib\ArrayManager;
+use Magento\Framework\View\ConfigInterface;
 
 class SetCachedImageUrls
 {
@@ -14,14 +18,25 @@ class SetCachedImageUrls
      * @var Product|null
      */
     private ?Product $product = null;
+    private array $frontendViewConfig = [];
 
     /**
+     * @param ModuleConfig $moduleConfig
      * @param ImageHelper $imageHelper
      * @param ProductFactory $productFactory
+     * @param ArrayManager $arrayManager
+     * @param ConfigInterface $viewConfig
+     * @param int|null $fallbackHeight
+     * @param int|null $fallbackWidth
      */
     public function __construct(
-        private readonly ImageHelper    $imageHelper,
-        private readonly ProductFactory $productFactory
+        private readonly ModuleConfig    $moduleConfig,
+        private readonly ImageHelper     $imageHelper,
+        private readonly ProductFactory  $productFactory,
+        private readonly ArrayManager    $arrayManager,
+        private readonly ConfigInterface $viewConfig,
+        private readonly ?int $fallbackHeight = null,
+        private readonly ?int $fallbackWidth = null,
     ) {
     }
 
@@ -84,9 +99,46 @@ class SetCachedImageUrls
             return $imageHelper->getDefaultPlaceholderUrl('thumbnail');
         }
 
-        /**
-         * Resize image to the default 90 x 90 px dimensions provided in the view.xml file
-         */
-        return $imageHelper->setImageFile($imageFile)->resize(90, 90)->getUrl();
+        $imageDimensions = $this->getImageDimensions();
+
+        return $imageHelper->setImageFile($imageFile)
+            ->resize($imageDimensions['width'], $imageDimensions['height'])
+            ->getUrl();
+    }
+
+    private function getImageDimensions(): array
+    {
+        if ($this->moduleConfig->getResizeMode() === SizeMode::MODE_MANUAL) {
+            return [
+                'height' => $this->moduleConfig->getResizeHeight(),
+                'width' => $this->moduleConfig->getResizeWidth(),
+            ];
+        }
+
+        if ($imageId = $this->moduleConfig->getImageId()) {
+            $imageConfig = $this->arrayManager->get(
+                sprintf('media/Magento_Catalog/images/%s', $imageId),
+                $this->getFrontendViewConfig()
+            ) ?? [];
+
+            return [
+                'height' => $this->arrayManager->get('height', $imageConfig),
+                'width' => $this->arrayManager->get('width', $imageConfig),
+            ];
+        }
+
+        return [
+            'height' => $this->fallbackHeight,
+            'width' => $this->fallbackWidth,
+        ];
+    }
+
+    private function getFrontendViewConfig(): array
+    {
+        if (!$this->frontendViewConfig) {
+            $this->frontendViewConfig = $this->viewConfig->getViewConfig(['area' => 'frontend'])->read() ?? [];
+        }
+
+        return $this->frontendViewConfig;
     }
 }

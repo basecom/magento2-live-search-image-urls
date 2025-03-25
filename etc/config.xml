@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <storefront_features>
+            <image_dimensions>
+                <size_mode>automatic</size_mode>
+                <image_id>product_page_image_small</image_id>
+                <resize_height>90</resize_height>
+                <resize_width>90</resize_width>
+            </image_dimensions>
+        </storefront_features>
+    </default>
+</config>

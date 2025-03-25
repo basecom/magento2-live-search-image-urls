@@ -7,4 +7,10 @@
                 sortOrder="10"
         />
     </type>
+    <type name="Basecom\LiveSearchImageUrls\Plugin\SetCachedImageUrls">
+        <arguments>
+            <argument name="fallbackHeight" xsi:type="number">90</argument>
+            <argument name="fallbackWidth" xsi:type="number">90</argument>
+        </arguments>
+    </type>
 </config>
