@@ -27,8 +27,10 @@ class ModuleConfig
 
     public function getResizeImageTypes($scopeId = null): array
     {
-        $resizeImageTypes = $this->scopeConfig->getValue(self::XML_PATH_ACTIVE_IMAGE_TYPES, ScopeInterface::SCOPE_STORE, $scopeId) ?? 'none';
-        return $resizeImageTypesArray = explode(',', $resizeImageTypes);
+        $resizeImageTypes = $this->scopeConfig
+            ->getValue(self::XML_PATH_ACTIVE_IMAGE_TYPES, ScopeInterface::SCOPE_STORE, $scopeId)
+            ?? SelectedImageTypes::IMAGE_TYPE_NONE;
+        return explode(',', $resizeImageTypes);
     }
 
     public function getImageId($imageType, $scopeId = null): ?string
