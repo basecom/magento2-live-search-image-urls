@@ -3,75 +3,261 @@
         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
     <system>
         <section id="storefront_features">
-            <group id="image_dimensions"
+            <group id="resize_images"
                    translate="label"
                    sortOrder="100"
                    showInDefault="1"
                    showInWebsite="1"
                    showInStore="1">
-                <label>Image Dimensions</label>
-                <field id="size_mode"
+                <label>Resize Images</label>
+
+                <field id="image_types"
+                       translate="label comment"
+                       type="multiselect"
+                       sortOrder="10"
+                       showInDefault="1"
+                       showInWebsite="1"
+                       showInStore="1"
+                       canRestore="0">
+                    <label>Image Selection</label>
+                    <comment>
+                        <![CDATA[
+                            The selected image types will be resized. Select 'none' to disable resizing for all image types.
+                        ]]>
+                    </comment>
+                    <source_model>Basecom\LiveSearchImageUrls\Model\Config\Source\SelectedImageTypes</source_model>
+                </field>
+
+                <field id="resize_mode"
                        translate="label comment"
                        type="select"
                        sortOrder="10"
                        showInDefault="1"
                        showInWebsite="1"
                        showInStore="1"
-                       canRestore="1">
+                       canRestore="0">
                     <label>Resize Mode</label>
+                    <tooltip>
+                        <![CDATA[
+                            When set to "automatic", the image ids are read from the <b>view.xml</b> file of the theme that is
+                            selected for the <b>default store</b>. This is independent of the current store view selected in the admin area.
+                        ]]>
+                    </tooltip>
                     <comment>
                         <![CDATA[
                             Only works on Hyvä Storefronts!
                             <br>
-                            Auto: Read from theme's view.xml file (recommended).
+                            Automatic: Read from theme's view.xml file (recommended).
                             <br>
                             Manual: Define custom width and height values.
                         ]]>
                     </comment>
                     <source_model>Basecom\LiveSearchImageUrls\Model\Config\Source\SizeMode</source_model>
                 </field>
-                <field id="image_id"
+
+                <group id="thumbnail"
                        translate="label"
-                       type="select"
-                       sortOrder="20"
+                       sortOrder="100"
                        showInDefault="1"
                        showInWebsite="1"
-                       showInStore="1"
-                       canRestore="1">
-                    <label>Image ID</label>
-                    <source_model>Basecom\LiveSearchImageUrls\Model\Config\Source\ViewXmlImageTypes</source_model>
-                    <depends>
-                        <field id="storefront_features/image_dimensions/size_mode">automatic</field>
-                    </depends>
-                </field>
-                <field id="resize_height"
+                       showInStore="1">
+                    <label>Thumbnail</label>
+                    <field id="image_id"
+                           translate="label"
+                           type="select"
+                           sortOrder="10"
+                           showInDefault="1"
+                           showInWebsite="1"
+                           showInStore="1"
+                           canRestore="1">
+                        <label>Image ID</label>
+                        <source_model>Basecom\LiveSearchImageUrls\Model\Config\Source\ViewXmlThumbnail</source_model>
+                        <depends>
+                            <field id="storefront_features/resize_images/resize_mode">automatic</field>
+                        </depends>
+                    </field>
+                    <field id="resize_height"
+                           translate="label"
+                           type="text"
+                           sortOrder="10"
+                           showInDefault="1"
+                           showInWebsite="1"
+                           showInStore="1"
+                           canRestore="1">
+                        <label>Height (px)</label>
+                        <validate>required-entry integer</validate>
+                        <depends>
+                            <field id="storefront_features/resize_images/resize_mode">manual</field>
+                        </depends>
+                    </field>
+                    <field id="resize_width"
+                           translate="label"
+                           type="text"
+                           sortOrder="40"
+                           showInDefault="1"
+                           showInWebsite="1"
+                           showInStore="1"
+                           canRestore="1">
+                        <label>Width (px)</label>
+                        <validate>required-entry integer</validate>
+                        <depends>
+                            <field id="storefront_features/resize_images/resize_mode">manual</field>
+                        </depends>
+                    </field>
+                </group>
+
+                <group id="small_image"
                        translate="label"
-                       type="text"
-                       sortOrder="30"
+                       sortOrder="100"
                        showInDefault="1"
                        showInWebsite="1"
-                       showInStore="1"
-                       canRestore="1">
-                    <label>Height (px)</label>
-                    <validate>required-entry integer</validate>
-                    <depends>
-                        <field id="storefront_features/image_dimensions/size_mode">manual</field>
-                    </depends>
-                </field>
-                <field id="resize_width"
+                       showInStore="1">
+                    <label>Small Image</label>
+                    <field id="image_id"
+                           translate="label"
+                           type="select"
+                           sortOrder="20"
+                           showInDefault="1"
+                           showInWebsite="1"
+                           showInStore="1"
+                           canRestore="1">
+                        <label>Image ID</label>
+                        <source_model>Basecom\LiveSearchImageUrls\Model\Config\Source\ViewXmlSmallImage</source_model>
+                        <depends>
+                            <field id="storefront_features/resize_images/resize_mode">automatic</field>
+                        </depends>
+                    </field>
+                    <field id="resize_height"
+                           translate="label"
+                           type="text"
+                           sortOrder="30"
+                           showInDefault="1"
+                           showInWebsite="1"
+                           showInStore="1"
+                           canRestore="1">
+                        <label>Height (px)</label>
+                        <validate>required-entry integer</validate>
+                        <depends>
+                            <field id="storefront_features/resize_images/resize_mode">manual</field>
+                        </depends>
+                    </field>
+                    <field id="resize_width"
+                           translate="label"
+                           type="text"
+                           sortOrder="40"
+                           showInDefault="1"
+                           showInWebsite="1"
+                           showInStore="1"
+                           canRestore="1">
+                        <label>Width (px)</label>
+                        <validate>required-entry integer</validate>
+                        <depends>
+                            <field id="storefront_features/resize_images/resize_mode">manual</field>
+                        </depends>
+                    </field>
+                </group>
+
+                <group id="image"
                        translate="label"
-                       type="text"
-                       sortOrder="40"
+                       sortOrder="100"
                        showInDefault="1"
                        showInWebsite="1"
-                       showInStore="1"
-                       canRestore="1">
-                    <label>Width (px)</label>
-                    <validate>required-entry integer</validate>
-                    <depends>
-                        <field id="storefront_features/image_dimensions/size_mode">manual</field>
-                    </depends>
-                </field>
+                       showInStore="1">
+                    <label>Image</label>
+                    <field id="image_id"
+                           translate="label"
+                           type="select"
+                           sortOrder="20"
+                           showInDefault="1"
+                           showInWebsite="1"
+                           showInStore="1"
+                           canRestore="1">
+                        <label>Image ID</label>
+                        <source_model>Basecom\LiveSearchImageUrls\Model\Config\Source\ViewXmlImage</source_model>
+                        <depends>
+                            <field id="storefront_features/resize_images/resize_mode">automatic</field>
+                        </depends>
+                    </field>
+                    <field id="resize_height"
+                           translate="label"
+                           type="text"
+                           sortOrder="30"
+                           showInDefault="1"
+                           showInWebsite="1"
+                           showInStore="1"
+                           canRestore="1">
+                        <label>Height (px)</label>
+                        <validate>required-entry integer</validate>
+                        <depends>
+                            <field id="storefront_features/resize_images/resize_mode">manual</field>
+                        </depends>
+                    </field>
+                    <field id="resize_width"
+                           translate="label"
+                           type="text"
+                           sortOrder="40"
+                           showInDefault="1"
+                           showInWebsite="1"
+                           showInStore="1"
+                           canRestore="1">
+                        <label>Width (px)</label>
+                        <validate>required-entry integer</validate>
+                        <depends>
+                            <field id="storefront_features/resize_images/resize_mode">manual</field>
+                        </depends>
+                    </field>
+                </group>
+
+                <group id="swatch_image"
+                       translate="label"
+                       sortOrder="100"
+                       showInDefault="1"
+                       showInWebsite="1"
+                       showInStore="1">
+                    <label>Swatch Image</label>
+                    <field id="image_id"
+                           translate="label"
+                           type="select"
+                           sortOrder="20"
+                           showInDefault="1"
+                           showInWebsite="1"
+                           showInStore="1"
+                           canRestore="1">
+                        <label>Image ID</label>
+                        <source_model>Basecom\LiveSearchImageUrls\Model\Config\Source\ViewXmlSwatchImage</source_model>
+                        <depends>
+                            <field id="storefront_features/resize_images/resize_mode">automatic</field>
+                        </depends>
+                    </field>
+                    <field id="resize_height"
+                           translate="label"
+                           type="text"
+                           sortOrder="30"
+                           showInDefault="1"
+                           showInWebsite="1"
+                           showInStore="1"
+                           canRestore="1">
+                        <label>Height (px)</label>
+                        <validate>required-entry integer</validate>
+                        <depends>
+                            <field id="storefront_features/resize_images/resize_mode">manual</field>
+                        </depends>
+                    </field>
+                    <field id="resize_width"
+                           translate="label"
+                           type="text"
+                           sortOrder="40"
+                           showInDefault="1"
+                           showInWebsite="1"
+                           showInStore="1"
+                           canRestore="1">
+                        <label>Width (px)</label>
+                        <validate>required-entry integer</validate>
+                        <depends>
+                            <field id="storefront_features/resize_images/resize_mode">manual</field>
+                        </depends>
+                    </field>
+                </group>
             </group>
         </section>
     </system>
