@@ -10,7 +10,7 @@ use Magento\Framework\View\ConfigInterface;
 class ViewXmlImageTypes implements OptionSourceInterface
 {
     public function __construct(
-        private readonly ArrayManager $arrayManager,
+        private readonly ArrayManager    $arrayManager,
         private readonly ConfigInterface $viewConfig,
         private readonly string $imageType = 'thumbnail'
     ) {
@@ -23,15 +23,15 @@ class ViewXmlImageTypes implements OptionSourceInterface
         $imageConfig = $this->arrayManager->get('media/Magento_Catalog/images', $viewConfig) ?? [];
 
         foreach ($imageConfig as $type => $config) {
-            if (!isset($config['type']) || $config['type'] !== $this->imageType){
+            if (!isset($config['type']) || $config['type'] !== $this->imageType) {
                 continue;
             }
 
             $suffix = '';
 
-            if (array_key_exists('width', $config)) {
+            if (isset($config['width'])) {
                 $widthSuffix = 'W: ' . $config['width'] . 'px';
-                $heightSuffix = array_key_exists('height', $config)
+                $heightSuffix = isset($config['height'])
                     ? 'H: ' . $config['height'] . 'px'
                     : 'H: auto';
 
