@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Basecom\LiveSearchImageUrls\Plugin;
 
+use Basecom\LiveSearchImageUrls\Model\Config\Source\SelectedImageTypes;
 use Basecom\LiveSearchImageUrls\Model\Config\Source\SizeMode;
 use Basecom\LiveSearchImageUrls\System\ModuleConfig;
 use Magento\Catalog\Helper\Image as ImageHelper;
@@ -26,8 +27,7 @@ class SetCachedImageUrls
      * @param ProductFactory $productFactory
      * @param ArrayManager $arrayManager
      * @param ConfigInterface $viewConfig
-     * @param int|null $fallbackHeight
-     * @param int|null $fallbackWidth
+     * @param array|null $fallbackDimensions
      */
     public function __construct(
         private readonly ModuleConfig    $moduleConfig,
@@ -35,8 +35,7 @@ class SetCachedImageUrls
         private readonly ProductFactory  $productFactory,
         private readonly ArrayManager    $arrayManager,
         private readonly ConfigInterface $viewConfig,
-        private readonly ?int $fallbackHeight = null,
-        private readonly ?int $fallbackWidth = null,
+        private readonly ?array          $fallbackDimensions = null,
     ) {
     }
 
@@ -70,15 +69,29 @@ class SetCachedImageUrls
      */
     public function afterFormat(ImageFormatter $subject, array $result, array $row): array
     {
-        $imageFilePath = $row['thumbnail'] ?? null;
+        $resizeImageTypes = $this->moduleConfig->getResizeImageTypes();
 
-        if (!$imageFilePath) {
+        if (in_array(SelectedImageTypes::IMAGE_TYPE_NONE, $resizeImageTypes, true)) {
             return $result;
         }
 
-        $result['thumbnail']['url'] = $this->getResizedImageUrl($imageFilePath);
+        foreach ($resizeImageTypes as $imageType) {
+            $imageTypeSnakeCase = $this->fromSnakeToCamelCase($imageType);
+            $imageFilePath = $row[$imageTypeSnakeCase] ?? null;
+
+            if (!$imageFilePath) {
+                return $result;
+            }
+
+            $result[$imageTypeSnakeCase]['url'] = $this->getResizedImageUrl($imageType, $imageFilePath);
+        }
 
         return $result;
+    }
+
+    private function fromSnakeToCamelCase(string $input): string
+    {
+        return lcfirst(str_replace('_', '', ucwords($input, '_')));
     }
 
     /**
@@ -87,7 +100,7 @@ class SetCachedImageUrls
      * @param string $imageFile
      * @return string
      */
-    private function getResizedImageUrl(string $imageFile): string
+    private function getResizedImageUrl(string $imageType, string $imageFile): string
     {
         $imageHelper = $this->imageHelper->init($this->getProduct(), 'product_page_image_small');
 
@@ -99,23 +112,23 @@ class SetCachedImageUrls
             return $imageHelper->getDefaultPlaceholderUrl('thumbnail');
         }
 
-        $imageDimensions = $this->getImageDimensions();
+        $imageDimensions = $this->getImageDimensions($imageType);
 
         return $imageHelper->setImageFile($imageFile)
             ->resize($imageDimensions['width'], $imageDimensions['height'])
             ->getUrl();
     }
 
-    private function getImageDimensions(): array
+    private function getImageDimensions(string $imageType): array
     {
         if ($this->moduleConfig->getResizeMode() === SizeMode::MODE_MANUAL) {
             return [
-                'height' => $this->moduleConfig->getResizeHeight(),
-                'width' => $this->moduleConfig->getResizeWidth(),
+                'height' => $this->moduleConfig->getResizeHeight($imageType),
+                'width' => $this->moduleConfig->getResizeWidth($imageType),
             ];
         }
 
-        if ($imageId = $this->moduleConfig->getImageId()) {
+        if ($imageId = $this->moduleConfig->getImageId($imageType)) {
             $imageConfig = $this->arrayManager->get(
                 sprintf('media/Magento_Catalog/images/%s', $imageId),
                 $this->getFrontendViewConfig()
@@ -128,8 +141,8 @@ class SetCachedImageUrls
         }
 
         return [
-            'height' => $this->fallbackHeight,
-            'width' => $this->fallbackWidth,
+            'height' => $this->fallbackDimensions[$imageType]['height'],
+            'width' => $this->fallbackDimensions[$imageType]['width'],
         ];
     }
 
