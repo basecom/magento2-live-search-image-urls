@@ -9,7 +9,7 @@ use Magento\Store\Model\ScopeInterface;
 
 class ModuleConfig
 {
-    private const XML_PATH_ACTIVE_IMAGE_TYPES = 'storefront_features/resize_images/image_types';
+    private const XML_PATH_RESIZE_IMAGE_TYPES = 'storefront_features/resize_images/image_types';
     private const XML_PATH_RESIZE_MODE = 'storefront_features/resize_images/resize_mode';
     private const XML_PATH_RESIZE_IMAGE_ID = 'storefront_features/resize_images/%s/image_id';
     private const XML_PATH_RESIZE_HEIGHT = 'storefront_features/resize_images/%s/resize_height';
@@ -28,7 +28,7 @@ class ModuleConfig
     public function getResizeImageTypes($scopeId = null): array
     {
         $resizeImageTypes = $this->scopeConfig
-            ->getValue(self::XML_PATH_ACTIVE_IMAGE_TYPES, ScopeInterface::SCOPE_STORE, $scopeId)
+            ->getValue(self::XML_PATH_RESIZE_IMAGE_TYPES, ScopeInterface::SCOPE_STORE, $scopeId)
             ?? SelectedImageTypes::IMAGE_TYPE_NONE;
         return explode(',', $resizeImageTypes);
     }
