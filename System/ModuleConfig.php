@@ -33,20 +33,20 @@ class ModuleConfig
         return explode(',', $resizeImageTypes);
     }
 
-    public function getImageId($imageType, $scopeId = null): ?string
+    public function getImageId(string $imageType, $scopeId = null): ?string
     {
         $configPath = sprintf(self::XML_PATH_RESIZE_IMAGE_ID, $imageType);
         return $this->scopeConfig->getValue($configPath, ScopeInterface::SCOPE_STORE, $scopeId);
     }
 
-    public function getResizeHeight($imageType, $scopeId = null): ?int
+    public function getResizeHeight(string $imageType, $scopeId = null): ?int
     {
         $configPath = sprintf(self::XML_PATH_RESIZE_HEIGHT, $imageType);
         return (int)$this->scopeConfig->getValue($configPath, ScopeInterface::SCOPE_STORE, $scopeId)
             ?? null;
     }
 
-    public function getResizeWidth($imageType, $scopeId = null): ?int
+    public function getResizeWidth(string $imageType, $scopeId = null): ?int
     {
         $configPath = sprintf(self::XML_PATH_RESIZE_WIDTH, $imageType);
         return (int)$this->scopeConfig->getValue($configPath, ScopeInterface::SCOPE_STORE, $scopeId)
