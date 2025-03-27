@@ -18,13 +18,9 @@
                        showInDefault="1"
                        showInWebsite="1"
                        showInStore="1"
-                       canRestore="0">
+                       canRestore="1">
                     <label>Image Selection</label>
-                    <comment>
-                        <![CDATA[
-                            The selected image types will be resized. Select 'none' to disable resizing for all image types.
-                        ]]>
-                    </comment>
+                    <comment>The selected image types will be resized. Select 'none' to disable resizing for all image types.</comment>
                     <source_model>Basecom\LiveSearchImageUrls\Model\Config\Source\SelectedImageTypes</source_model>
                 </field>
 
@@ -35,7 +31,7 @@
                        showInDefault="1"
                        showInWebsite="1"
                        showInStore="1"
-                       canRestore="0">
+                       canRestore="1">
                     <label>Resize Mode</label>
                     <tooltip>
                         <![CDATA[
@@ -45,8 +41,6 @@
                     </tooltip>
                     <comment>
                         <![CDATA[
-                            Only works on Hyvä Storefronts!
-                            <br>
                             Automatic: Read from theme's view.xml file (recommended).
                             <br>
                             Manual: Define custom width and height values.
