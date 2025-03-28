@@ -15,7 +15,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed
 
-## [0.9.1] - 2025-03-24
+## [1.0.0] - 2025-03-28
 
 ### Added
 
@@ -32,4 +32,4 @@ Special thanks to [Kiel Pykettk](https://github.com/pykettk) for his [contributi
 - Release of this project 🎉
 
 [0.9.0]: https://github.com/basecom/magento2-live-search-image-urls/releases/tag/v0.9.0
-[0.9.1]: https://github.com/basecom/magento2-live-search-image-urls/releases/tag/v0.9.1
+[1.0.0]: https://github.com/basecom/magento2-live-search-image-urls/releases/tag/v1.0.0
