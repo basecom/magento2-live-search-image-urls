@@ -3,12 +3,30 @@
         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
     <default>
         <storefront_features>
-            <image_dimensions>
+            <resize_images>
+                <image_types>none</image_types>
                 <size_mode>automatic</size_mode>
-                <image_id>product_page_image_small</image_id>
-                <resize_height>90</resize_height>
-                <resize_width>90</resize_width>
-            </image_dimensions>
+                <thumbnail>
+                    <image_id>product_page_image_small</image_id>
+                    <resize_height>90</resize_height>
+                    <resize_width>90</resize_width>
+                </thumbnail>
+                <small_image>
+                    <image_id>category_page_grid</image_id>
+                    <resize_height>360</resize_height>
+                    <resize_width>360</resize_width>
+                </small_image>
+                <image>
+                    <image_id>product_page_image_medium</image_id>
+                    <resize_height>700</resize_height>
+                    <resize_width>700</resize_width>
+                </image>
+                <swatch_image>
+                    <image_id>swatch_image</image_id>
+                    <resize_height>30</resize_height>
+                    <resize_width>20</resize_width>
+                </swatch_image>
+            </resize_images>
         </storefront_features>
     </default>
 </config>

@@ -9,8 +9,24 @@
     </type>
     <type name="Basecom\LiveSearchImageUrls\Plugin\SetCachedImageUrls">
         <arguments>
-            <argument name="fallbackHeight" xsi:type="number">90</argument>
-            <argument name="fallbackWidth" xsi:type="number">90</argument>
+            <argument name="fallbackDimensions" xsi:type="array">
+                <item name="thumbnail" xsi:type="array">
+                    <item name="width" xsi:type="number">90</item>
+                    <item name="height" xsi:type="number">90</item>
+                </item>
+                <item name="small_image" xsi:type="array">
+                    <item name="width" xsi:type="number">360</item>
+                    <item name="height" xsi:type="number">360</item>
+                </item>
+                <item name="image" xsi:type="array">
+                    <item name="width" xsi:type="number">700</item>
+                    <item name="height" xsi:type="number">700</item>
+                </item>
+                <item name="swatch_image" xsi:type="array">
+                    <item name="width" xsi:type="number">30</item>
+                    <item name="height" xsi:type="number">20</item>
+                </item>
+            </argument>
         </arguments>
     </type>
 </config>
